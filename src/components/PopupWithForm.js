@@ -1,5 +1,4 @@
 import React from "react";
-// import useEscapeClose from '../hooks/useEscapeClose.js';
 
 function PopupWithForm({
   name,
@@ -26,9 +25,8 @@ function PopupWithForm({
         <form
           className={`popup__form popup__form_${name}`}
           name={`popup__form_${name}`}
-          noValidate
         >
-          <>{children}</>
+          {children}
           <button
             className={`popup__button-save popup__button-save_${name}`}
             type="submit"

@@ -4,8 +4,8 @@ import api from "../utils/Api.js";
 import Card from "./Card.js";
 function Main(props) {
   const [userName, setUserName] = useState("");
-  const [userAvatar, setuserAvatar] = useState("");
-  const [userDescription, setuserDescription] = useState("");
+  const [userAvatar, setUserAvatar] = useState("");
+  const [userDescription, setUserDescription] = useState("");
   const [cards, setCards] = useState([]);
 
   React.useEffect(() => {
@@ -13,8 +13,8 @@ function Main(props) {
       .getUserInfo()
       .then((data) => {
         setUserName(data.name);
-        setuserAvatar(data.avatar);
-        setuserDescription(data.about);
+        setUserAvatar(data.avatar);
+        setUserDescription(data.about);
       })
       .catch((err) => {
         console.log(err);
@@ -72,6 +72,7 @@ function Main(props) {
       <section className="elements">
         {cards.map((item) => (
           <Card
+            key={item._id}
             card={item}
             onCardClick={props.onCardClick}
             onDeleteIcon={props.onDeleteIcon}
