@@ -45,25 +45,23 @@ class Api {
     }).then(this._getResponseData);
   }
 
-  likeCard(id) {
-    return fetch(`${this._url}cards//likes/${id}`, {
-      method: "PUT",
+  changeLikeCardStatus(cardId, isNotLiked) {
+    return fetch(`${this._url}cards/likes/${cardId}`, {
+      method: isNotLiked ? "PUT" : "DELETE",
       headers: this._headers,
-    }).then(this._getResponseData);
-  }
-
-  dislikeCard(id) {
-    return fetch(`${this._url}cards//likes/${id}`, {
-      method: "DELETE",
-      headers: this._headers,
-    }).then(this._getResponseData);
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
   }
 
   setAvatar(link) {
     return fetch(`${this._url}users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify({ avatar: link.link }),
+      body: JSON.stringify({ avatar: link }),
     }).then(this._getResponseData);
   }
 

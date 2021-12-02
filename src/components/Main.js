@@ -1,42 +1,8 @@
-import React, { useState, useEffect } from "react";
-
-import api from "../utils/Api.js";
+import React from "react";
 import Card from "./Card.js";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 function Main(props) {
-  const [userName, setUserName] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [cards, setCards] = useState([]);
-
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((data) => {
-        setUserName(data.name);
-        setUserAvatar(data.avatar);
-        setUserDescription(data.about);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    api
-      .getCards()
-      .then((data) => {
-        setCards(
-          data.map((item) => ({
-            name: item.name,
-            likes: item.likes.length,
-            link: item.link,
-          }))
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main className="content">
@@ -45,11 +11,11 @@ function Main(props) {
           <div
             className="profile__avatar"
             onClick={props.onEditAvatar}
-            style={{ backgroundImage: `url(${userAvatar})` }}
+            style={{ backgroundImage: `url(${currentUser.avatar})` }}
           ></div>
           <div className="profile__info">
             <div className="profile__name-block">
-              <h1 className="profile__info-name">{userName}</h1>
+              <h1 className="profile__info-name">{currentUser.name}</h1>
               <button
                 onClick={props.onEditProfile}
                 className="profile__edit-button"
@@ -57,7 +23,7 @@ function Main(props) {
                 aria-label="открыть редактирование профиля"
               ></button>
             </div>
-            <p className="profile__info-profession">{userDescription}</p>
+            <p className="profile__info-profession">{currentUser.about}</p>
           </div>
         </div>
 
@@ -70,13 +36,14 @@ function Main(props) {
       </section>
 
       <section className="elements">
-        {cards.map((item) => (
-          <Card
-            key={item._id}
-            card={item}
-            onCardClick={props.onCardClick}
-            onDeleteIcon={props.onDeleteIcon}
-          />
+        {props.cards.map((item) => (
+            <Card
+              card={item}
+              key={item['_id']}
+                onCardClick={props.onCardClick}
+                onCardLike={props.onCardLike}
+                onCardDelete={props.onCardDelete}
+            />
         ))}
       </section>
     </main>
